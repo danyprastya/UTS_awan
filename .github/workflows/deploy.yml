@@ -1,0 +1,30 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main  # Jalankan workflow setiap ada push ke branch main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest  # Jalankan workflow di runner Ubuntu terbaru
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            echo "Masuk ke server EC2"
+            cd /home/ec2-user/s3-upload-example
+            echo "Pull update dari GitHub"
+            git pull origin main
+            echo "Install dependencies"
+            npm install
+            echo "Restart aplikasi pakai PM2"
+            pm2 restart s3-upload-example || pm2 start index.js --name s3-upload-example
