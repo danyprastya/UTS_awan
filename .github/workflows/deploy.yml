@@ -36,4 +36,4 @@ jobs:
             export AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
             echo "Restart aplikasi pakai PM2"
-            pm2 restart UTS_awan || pm2 start index.js --name UTS_awan
+            pm2 reload UTS_awan || pm2 start index.js --name UTS_awan
