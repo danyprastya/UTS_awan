@@ -45,7 +45,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
   });
 });
 
-app.listen(3000, () => {
+app.listen(3000, '0.0.0.0', () => {
   console.log('Server running at http://localhost:3000');
   console.log("🚀 Update baru di " + new Date());
 });// test deploy
