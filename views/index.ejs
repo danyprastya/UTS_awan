@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Upload ke S3 Bucket</title>
+  <meta charset="UTF-8">
+</head>
+<body style="max-width: 600px; margin: 50px auto; font-family: Arial, sans-serif; padding: 20px;">
+
+  <h1 style="margin-bottom: 20px; text-align: center;">Upload ke S3 Bucket</h1>
+
+  <form action="/upload" method="POST" enctype="multipart/form-data" style="margin-bottom: 30px;">
+    <input type="file" name="file" required style="display: block; margin-bottom: 15px; padding: 8px; width: 100%;">
+    <button type="submit" style="padding: 10px 20px; background-color: #007BFF; color: white; border: none; cursor: pointer;">
+      Upload
+    </button>
+  </form>
+
+  <h2 style="margin-bottom: 15px;">File yang Sudah Terupload:</h2>
+  <ul style="list-style-type: none; padding: 0;">
+    <% files.forEach(file => { %>
+      <li style="padding: 10px; border: 1px solid #ccc; margin-bottom: 5px;">
+        <a href="https://<%= process.env.S3_BUCKET_NAME %>.s3.<%= process.env.AWS_REGION %>.amazonaws.com/<%= file.Key %>" 
+           target="_blank" 
+           style="text-decoration: none; color: #007BFF;">
+          <%= file.Key %>
+        </a>
+      </li>
+    <% }) %>
+  </ul>
+
+</body>
+</html>
