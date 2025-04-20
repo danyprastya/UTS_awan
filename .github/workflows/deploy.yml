@@ -3,11 +3,11 @@ name: Deploy to EC2
 on:
   push:
     branches:
-      - main  # Jalankan workflow setiap ada push ke branch main
+      - main
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest  # Jalankan workflow di runner Ubuntu terbaru
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
@@ -21,10 +21,19 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             echo "Masuk ke server EC2"
-            cd /home/ec2-user/s3-upload-example
+            cd /home/ec2-user/UTS_awan
+
             echo "Pull update dari GitHub"
             git pull origin main
+
             echo "Install dependencies"
             npm install
+
+            echo "Set environment variables"
+            export AWS_REGION=${{ secrets.AWS_REGION }}
+            export S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }}
+            export AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
+            export AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
             echo "Restart aplikasi pakai PM2"
-            pm2 restart s3-upload-example || pm2 start index.js --name s3-upload-example
+            pm2 restart UTS_awan || pm2 start index.js --name UTS_awan
